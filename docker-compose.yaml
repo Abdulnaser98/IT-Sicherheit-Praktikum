@@ -1,0 +1,30 @@
+version: '2'
+
+services:
+  db:
+    image: mysql:latest
+    restart: always
+    container_name: mysql-db
+    ports:
+      - 3308:3306
+    volumes:
+      - ./mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+      MYSQL_ROOT_HOST: "${MYSQL_ROOT_HOST}"
+      MYSQL_HOST: "${MYSQL_HOST}"
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      PMA_HOST: db
+
+  web:
+    build: .
+    ports:
+      - "80:80"
