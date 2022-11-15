@@ -5,8 +5,8 @@
 #include <ESP8266WiFi.h>
 #include <NTPClient.h>
 #include <WiFiUdp.h>
-const char *ssid = "Vodafone-CB4D";  //ENTER YOUR WIFI ssid
-const char *password = "PbHEUPAAndJ4g8rr";  //ENTER YOUR WIFI password
+const char *ssid = "";  //ENTER YOUR WIFI ssid
+const char *password = "";  //ENTER YOUR WIFI password
 WiFiClient wifiClient;
 HTTPClient http;    //Declare object of class HTTPClient
 
@@ -89,7 +89,7 @@ time=formattedTime;
 //Post Data
 postData = "sensorData=" +  sensorData + "&date=" + currentDate+ "&time=" + formattedTime;
 
-http.begin(wifiClient,"http://172.24.148.139:80/postData.php");            //change the ip to your computer ip address
+http.begin(wifiClient,"http://IP-Adress:80/postData.php");            //change the ip to your computer ip address
 http.addHeader("Content-Type", "application/x-www-form-urlencoded");    //Specify content-type header
 
 int httpCode = http.POST(postData);   //Send the request
