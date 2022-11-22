@@ -2,8 +2,8 @@
 //Creates new record as per request
     //Connect to database
 
-    $servername = "127.0.0.1";
-    $port = 3308;
+    $servername = "db";
+    $port = 3306;
     $username = "root";
     $password = "root";
     $dbname = "sensordaten";
