@@ -29,7 +29,12 @@ services:
     environment:
       PMA_HOST: db
 
-  web:
+  api:
+    container_name: php-apache
     build: .
+    depends_on:
+        - db
+    volumes:
+        - ./api:/var/www/html/
     ports:
-      - "80:80"
+        - 80:80

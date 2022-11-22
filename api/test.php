@@ -2,8 +2,8 @@
 //Creates new record as per request
     //Connect to database
 
-    $servername = "127.0.0.1";
-    $port = 3308;
+    $servername = "db";
+    $port = 3306;
     $username = "root";
     $password = "root";
     $dbname = "sensordaten";
@@ -23,12 +23,7 @@
     //echo " Date:".$d."<BR>";
     $t = date("H:i:s");
 
-
-
-    $action_of_sensor = $_POST['sensor'];
-
-
-	$sql = "INSERT INTO Sesnoractions (action_of_sensor, date_of_action, time_of_action) VALUES ('".$action_of_sensor."', '".$d."', '".$t."')";
+	$sql = "INSERT INTO Sesnoractions (action_of_sensor, date_of_action, time_of_action) VALUES ('sensor', '".$d."', '".$t."')";
 
     //$sql = "INSERT INTO Sesnoractions (action_of_sensor, date_of_action, time_of_action) VALUES ('Hello world very new', '".$d."', '".$t."')";
 
