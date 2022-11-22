@@ -30,8 +30,7 @@
     //$sql = "INSERT INTO Sesnoractions (action_of_sensor, date_of_action, time_of_action) VALUES ('Hello world very new', '".$d."', '".$t."')";
 
 	if ($conn->query($sql) === TRUE) {
-		echo "The connection with the data base has benn succefually established and the data
-        now are being transferred from the arduino device to the data base";
+		echo "The connection with the data base has benn succefually established. You're good to go! 😻\n";
 	} else {
 		echo "Error: " . $sql . "<br>" . $conn->error;
 	}
