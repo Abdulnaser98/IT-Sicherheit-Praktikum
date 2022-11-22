@@ -16,28 +16,9 @@
     // Check connection
     if ($conn->connect_error) {
         die("Database Connection failed: " . $conn->connect_error);
+    } else {
+        echo "The connection with the data base has benn succefually established. You're good to go! 😻\n";
     }
-
-
-    //Get current date and time
-    date_default_timezone_set('Europe/Berlin');
-    $d = date("Y-m-d");
-    //echo " Date:".$d."<BR>";
-    $t = date("H:i:s");
-
-	$sql = "INSERT INTO Sesnoractions (action_of_sensor, date_of_action, time_of_action) VALUES ('sensor', '".$d."', '".$t."')";
-
-    //$sql = "INSERT INTO Sesnoractions (action_of_sensor, date_of_action, time_of_action) VALUES ('Hello world very new', '".$d."', '".$t."')";
-
-	if ($conn->query($sql) === TRUE) {
-		echo "The connection with the data base has benn succefually established. You're good to go! 😻\n";
-	} else {
-		echo "Error: " . $sql . "<br>" . $conn->error;
-	}
-
-
-
-
 
 	$conn->close();
 ?>
