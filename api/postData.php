@@ -24,10 +24,14 @@
 
 
 
-    $action_of_sensor = $_POST['sensor'];
+    $action_of_sensor = $_POST['sensorData'];
+    $date = $_POST['date'];
+    $time = $_POST['time'];
 
 
-	$sql = "INSERT INTO Sesnoractions (action_of_sensor, date_of_action, time_of_action) VALUES ('".$action_of_sensor."', '".$d."', '".$t."')";
+
+
+	$sql = "INSERT INTO Sesnoractions (action_of_sensor, date_of_action, time_of_action) VALUES ('".$action_of_sensor."', '".$date."', '".$time."')";
 
     //$sql = "INSERT INTO Sesnoractions (action_of_sensor, date_of_action, time_of_action) VALUES ('Hello world very new', '".$d."', '".$t."')";
 
