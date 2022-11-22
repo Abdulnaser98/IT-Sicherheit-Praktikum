@@ -36,5 +36,10 @@ services:
         - db
     volumes:
         - ./api:/var/www/html/
+    environment:
+      MYSQL_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_USER_NAME: "root"
+      MYSQL_SERVER: "db"
+      MYSQL_DB_NAME: "sensordaten"
     ports:
         - 80:80

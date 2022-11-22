@@ -2,12 +2,11 @@
 //Creates new record as per request
     //Connect to database
 
-    $servername = "db";
     $port = 3306;
-    $username = "root";
-    $password = "root";
-    $dbname = "sensordaten";
-
+    $servername = $_ENV['MYSQL_SERVER'];;
+    $username = $_ENV['MYSQL_USER_NAME'];;
+    $password = $_ENV['MYSQL_PASSWORD'];
+    $dbname = $_ENV['MYSQL_DB_NAME'];;
 
     // Create connection
     $conn = new mysqli($servername, $username, $password, $dbname, $port);
