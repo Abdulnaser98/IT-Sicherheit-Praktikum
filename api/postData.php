@@ -2,14 +2,14 @@
 //Creates new record as per request
     //Connect to database
 
-    $servername = "localhost";
-    $username = "Abdulönaser";
-    $password = "OM71BVGjTr8o8!8B";
-    $dbname = "sensordaten";
-
+    $port = 3306;
+    $servername = $_ENV['MYSQL_SERVER'];;
+    $username = $_ENV['MYSQL_USER_NAME'];;
+    $password = $_ENV['MYSQL_PASSWORD'];
+    $dbname = $_ENV['MYSQL_DB_NAME'];;
 
     // Create connection
-    $conn = new mysqli($servername, $username, $password, $dbname);
+    $conn = new mysqli($servername, $username, $password, $dbname, $port);
     // Check connection
     if ($conn->connect_error) {
         die("Database Connection failed: " . $conn->connect_error);

@@ -1,0 +1,41 @@
+version: '2'
+
+services:
+  db:
+    image: mysql:latest
+    restart: always
+    container_name: mysql-db
+    ports:
+      - 3308:3306
+    volumes:
+      - ./mysql:/var/lib/mysql
+      - ./mysql-init-files:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_USER: "${MYSQL_USER}"
+      MYSQL_PASSWORD: "${MYSQL_PASSWORD}"
+      MYSQL_ROOT_HOST: "${MYSQL_ROOT_HOST}"
+      MYSQL_HOST: "${MYSQL_HOST}"
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      PMA_HOST: db
+
+  api:
+    container_name: php-apache
+    build: .
+    depends_on:
+        - db
+    volumes:
+        - ./api:/var/www/html/
+    environment:
+      MYSQL_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_USER_NAME: "root"
+      MYSQL_SERVER: "db"
+      MYSQL_DB_NAME: "sensordaten"
+    ports:
+        - 80:80
