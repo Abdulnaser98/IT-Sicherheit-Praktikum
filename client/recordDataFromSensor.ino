@@ -1,12 +1,11 @@
-#define DIGITAL_PIN D1
 #include <WiFiClient.h>
 #include <ESP8266WebServer.h>
 #include <ESP8266HTTPClient.h>
 #include <ESP8266WiFi.h>
 #include <NTPClient.h>
 #include <WiFiUdp.h>
-const char *ssid = "";  //ENTER YOUR WIFI ssid
-const char *password = "";  //ENTER YOUR WIFI password
+const char *ssid = "MyAccessPoint1";  //ENTER YOUR WIFI ssid
+const char *password = "da433dcc";  //ENTER YOUR WIFI password
 WiFiClient wifiClient;
 HTTPClient http;    //Declare object of class HTTPClient
 
@@ -25,7 +24,6 @@ String months[12]={"January", "February", "March", "April", "May", "June", "July
 
 void setup() {
 Serial.begin(9600);
-pinMode(DIGITAL_PIN, INPUT);
 connectWifi();
 timeClient.begin();
 timeClient.setTimeOffset(3600);
@@ -56,11 +54,12 @@ void connectWifi(){
 }
 
 void loop() {
-  ldr = digitalRead(DIGITAL_PIN);
+  // read the input on analog pin 0:
+  int sensorValue = analogRead(A0);
   String formattedTime;
   String currentDate;
-  if (ldr) {
-    light = "No";
+  if (sensorValue != 1024) {
+    light = "Yes";
     formattedTime = getTime();
     Serial.print("Formatted Time: ");
     Serial.println(formattedTime);
@@ -69,7 +68,7 @@ void loop() {
     Serial.println(currentDate);
   }
   else {
-    light = "Yes";
+    light = "No";
     formattedTime = getTime();
     Serial.print("Formatted Time: ");
     Serial.println(formattedTime);
@@ -79,17 +78,20 @@ void loop() {
 }
 Serial.print("Light detected: ");
 Serial.println(light);
-delay(2000);
+//delay(2000);
 
 
 String sensorData,date,time,postData;
 sensorData=light;
+Serial.println(sensorData);
 date=currentDate;
+Serial.println(date);
 time=formattedTime;
+Serial.println(time);
 //Post Data
-postData = "sensorData=" +  sensorData + "&date=" + currentDate+ "&time=" + formattedTime;
+postData = "sensorData=" +  sensorData + "&date=" + currentDate+ "&time=" + time;
 
-http.begin(wifiClient,"http://IP-Adress:80/postData.php");            //change the ip to your computer ip address
+http.begin(wifiClient,"http://72.24.148.139:80/Server_side/postData.php");            //change the ip to your computer ip address
 http.addHeader("Content-Type", "application/x-www-form-urlencoded");    //Specify content-type header
 
 int httpCode = http.POST(postData);   //Send the request
@@ -102,7 +104,7 @@ Serial.println(payload);    //Print request response payload
 
 http.end();  //Close connection
 
-delay(5000);  //Post Data at every 5 seconds
+//delay(5000);  //Post Data at every 5 seconds
 
 }
 
