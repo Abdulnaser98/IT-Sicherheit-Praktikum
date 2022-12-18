@@ -4,34 +4,34 @@
 #include <ESP8266WiFi.h>
 #include <NTPClient.h>
 #include <WiFiUdp.h>
+
+
+// Globals
 const char *ssid = "MyAccessPoint1";  //ENTER YOUR WIFI ssid
 const char *password = "da433dcc";  //ENTER YOUR WIFI password
+const int lightLowerThreshold = 690;
+const int lightUpperThreshold = 705;
+int prevLightStatus = 0;
+
+String weekDays[7]={"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+String months[12]={"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+
+
 WiFiClient wifiClient;
 HTTPClient http;    //Declare object of class HTTPClient
-
-
-boolean ldr = false;
-String light;
 
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, "pool.ntp.org");
 
-//Week Days
-String weekDays[7]={"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
-//Month names
-String months[12]={"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 
 void setup() {
-Serial.begin(9600);
-connectWifi();
-timeClient.begin();
-timeClient.setTimeOffset(3600);
-
-
+  Serial.begin(9600);
+  connectWifi();
+  timeClient.begin();
+  timeClient.setTimeOffset(3600);
 }
 
-//function to connect to wifi
 void connectWifi(){
   delay(1000);
   Serial.begin(9600);
@@ -53,63 +53,7 @@ void connectWifi(){
   Serial.println(WiFi.localIP());  //IP address assigned to your ESP
 }
 
-void loop() {
-  // read the input on analog pin 0:
-  int sensorValue = analogRead(A0);
-  String formattedTime;
-  String currentDate;
-  if (sensorValue != 1024) {
-    light = "Yes";
-    formattedTime = getTime();
-    Serial.print("Formatted Time: ");
-    Serial.println(formattedTime);
-    currentDate = getDate();
-    Serial.print("Current date: ");
-    Serial.println(currentDate);
-  }
-  else {
-    light = "No";
-    formattedTime = getTime();
-    Serial.print("Formatted Time: ");
-    Serial.println(formattedTime);
-    currentDate = getDate();
-    Serial.print("Current date: ");
-    Serial.println(currentDate);
-}
-Serial.print("Light detected: ");
-Serial.println(light);
-//delay(2000);
 
-
-String sensorData,date,time,postData;
-sensorData=light;
-Serial.println(sensorData);
-date=currentDate;
-Serial.println(date);
-time=formattedTime;
-Serial.println(time);
-//Post Data
-postData = "sensorData=" +  sensorData + "&date=" + currentDate+ "&time=" + time;
-
-http.begin(wifiClient,"http://72.24.148.139:80/Server_side/postData.php");            //change the ip to your computer ip address
-http.addHeader("Content-Type", "application/x-www-form-urlencoded");    //Specify content-type header
-
-int httpCode = http.POST(postData);   //Send the request
-
-String payload = http.getString();  //Get the response payload
-Serial.println("httpCode is: ");
-Serial.println(httpCode);   //Print HTTP return code
-Serial.println(payload);    //Print request response payload
-
-
-http.end();  //Close connection
-
-//delay(5000);  //Post Data at every 5 seconds
-
-}
-
-
-// extarct the current time
 String getTime()
 {
     timeClient.update();
@@ -130,3 +74,50 @@ String getDate()
     return currentDate;
 }
 
+void loop() {
+  int sensorValue = analogRead(A0);
+  int lightStatus = 0;
+  String formattedTime;
+  String currentDate;
+  if (sensorValue < lightLowerThreshold) {
+    lightStatus = 1;
+  } else if (sensorValue > lightUpperThreshold) {
+    lightStatus = 0;
+  } else {
+    lightStatus = prevLightStatus;
+  }
+  
+  if (lightStatus != prevLightStatus) {
+    String sensorData,currentDate,formattedTime,postData;
+    if (lightStatus == 0) {
+      sensorData = "No";
+    } else {
+      sensorData = "Yes";
+    }
+
+    formattedTime = getTime();
+    Serial.print("Formatted Time: ");
+    Serial.println(formattedTime);
+    currentDate = getDate();
+    Serial.print("Current date: ");
+    Serial.println(currentDate);
+    
+    postData = "sensorData=" +  sensorData + "&date=" + currentDate+ "&time=" + formattedTime;
+    Serial.println(postData);
+    
+    http.begin(wifiClient,"http://192.168.178.35/postData.php");            //change the ip to your computer ip address
+    http.addHeader("Content-Type", "application/x-www-form-urlencoded");    //Specify content-type header
+    
+    int httpCode = http.POST(postData);   //Send the request
+    
+    String payload = http.getString();  //Get the response payload
+    Serial.println("httpCode is: ");
+    Serial.println(httpCode);   //Print HTTP return code
+    Serial.println(payload);    //Print request response payload
+    
+    
+    http.end();  //Close connection
+  }
+
+  prevLightStatus = lightStatus;
+}
