@@ -20,9 +20,10 @@ String months[12]={"January", "February", "March", "April", "May", "June", "July
 WiFiClient wifiClient;
 HTTPClient http;    //Declare object of class HTTPClient
 
-WiFiUDP ntpUDP;
-NTPClient timeClient(ntpUDP, "pool.ntp.org");
-
+WiFiUDP udp;
+NTPClient timeClient(udp, "pool.ntp.org");
+IPAddress remoteIP(192,168,178,35);
+int remotePort = 9999;
 
 
 void setup() {
@@ -88,7 +89,7 @@ void loop() {
   }
   
   if (lightStatus != prevLightStatus) {
-    String sensorData,currentDate,formattedTime,postData;
+    String sensorData,currentDate,formattedTime;
     if (lightStatus == 0) {
       sensorData = "No";
     } else {
@@ -101,22 +102,14 @@ void loop() {
     currentDate = getDate();
     Serial.print("Current date: ");
     Serial.println(currentDate);
-    
-    postData = "sensorData=" +  sensorData + "&date=" + currentDate+ "&time=" + formattedTime;
-    Serial.println(postData);
-    
-    http.begin(wifiClient,"http://192.168.178.35/postData.php");            //change the ip to your computer ip address
-    http.addHeader("Content-Type", "application/x-www-form-urlencoded");    //Specify content-type header
-    
-    int httpCode = http.POST(postData);   //Send the request
-    
-    String payload = http.getString();  //Get the response payload
-    Serial.println("httpCode is: ");
-    Serial.println(httpCode);   //Print HTTP return code
-    Serial.println(payload);    //Print request response payload
-    
-    
-    http.end();  //Close connection
+
+    String postDataString = "sensorData: " +  sensorData + ", date: " + currentDate+ ", time: " + formattedTime;
+    const char* postData = postDataString.c_str();
+  
+    udp.beginPacket(remoteIP,remotePort);
+    udp.write(postData, strlen(postData));
+    udp.endPacket();
+
   }
 
   prevLightStatus = lightStatus;
