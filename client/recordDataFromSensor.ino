@@ -7,8 +7,8 @@
 
 
 // Globals
-const char *ssid = "MyAccessPoint1";  //ENTER YOUR WIFI ssid
-const char *password = "da433dcc";  //ENTER YOUR WIFI password
+const char *ssid = "MyAccessPoint";  //ENTER YOUR WIFI ssid
+const char *password = "0123asdf";  //ENTER YOUR WIFI password
 const int lightLowerThreshold = 690;
 const int lightUpperThreshold = 705;
 int prevLightStatus = 0;
@@ -22,8 +22,8 @@ HTTPClient http;    //Declare object of class HTTPClient
 
 WiFiUDP udp;
 NTPClient timeClient(udp, "pool.ntp.org");
-IPAddress remoteIP(192,168,178,35);
-int remotePort = 9999;
+IPAddress remoteIP(192,168,12,255);
+int remotePort = 8080;
 
 
 void setup() {
@@ -87,6 +87,8 @@ void loop() {
   } else {
     lightStatus = prevLightStatus;
   }
+  Serial.println(sensorValue);
+  Serial.println(lightStatus);
   
   if (lightStatus != prevLightStatus) {
     String sensorData,currentDate,formattedTime;
@@ -104,10 +106,14 @@ void loop() {
     Serial.println(currentDate);
 
     String postDataString = "sensorData: " +  sensorData + ", date: " + currentDate+ ", time: " + formattedTime;
-    const char* postData = postDataString.c_str();
-  
+    // const char* postData = postDataString.c_str();
+    udp.begin(8888);
+    int payloadlen = postDataString.length() + 1;
+    char payloadcharArray[payloadlen];
+    postDataString.toCharArray(payloadcharArray, payloadlen);
     udp.beginPacket(remoteIP,remotePort);
-    udp.write(postData, strlen(postData));
+    //udp.write(postData, strlen(postData));
+    udp.write(payloadcharArray);
     udp.endPacket();
 
   }
