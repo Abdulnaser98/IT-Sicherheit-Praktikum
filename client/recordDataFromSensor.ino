@@ -75,6 +75,19 @@ String getDate()
     return currentDate;
 }
 
+String makePayload(const String value)
+{
+    DynamicJsonDocument payload(1024);
+    payload["device"] = "Holzbox-Arduino";
+    payload["mac"] = WiFi.macAddress();
+    payload["sensor"] = "LDR";
+    payload["value"] = value;
+
+    char result[1024];
+    serializeJson(payload, result);
+    return result;
+}
+
 void loop() {
   int sensorValue = analogRead(A0);
   int lightStatus = 0;
@@ -105,15 +118,10 @@ void loop() {
     Serial.print("Current date: ");
     Serial.println(currentDate);
 
-    String postDataString = "sensorData: " +  sensorData + ", date: " + currentDate+ ", time: " + formattedTime;
-    // const char* postData = postDataString.c_str();
     udp.begin(8888);
-    int payloadlen = postDataString.length() + 1;
-    char payloadcharArray[payloadlen];
-    postDataString.toCharArray(payloadcharArray, payloadlen);
+    String payload = makePayload(sensorData);
     udp.beginPacket(remoteIP,remotePort);
-    //udp.write(postData, strlen(postData));
-    udp.write(payloadcharArray);
+    udp.write(payload);
     udp.endPacket();
 
   }
