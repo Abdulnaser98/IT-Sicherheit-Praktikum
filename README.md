@@ -9,7 +9,7 @@ TO DO
 
 ### Data Analysis
 
-1. Start a `Jupyter` server by running `docker run -p 8888:8888 -v $(pwd):/home/jovyan/work jupyter/scipy-notebook`. Make sure you have `docker` up and running. Token-authentication is enabled, meaning you can access the application by opening `http://127.0.0.1:8888/lab?token=<YOUR_TOKEN>`. The URL, including your token, is displayed in your terminal.
+1. Start a `Jupyter` server by running `docker run -p 8888:8888 -v $(pwd)/analysis:/home/jovyan/work jupyter/scipy-notebook`. Make sure you have `docker` up and running. Token-authentication is enabled, meaning you can access the application by opening `http://127.0.0.1:8888/lab?token=<YOUR_TOKEN>`. The URL, including your token, is displayed in your terminal.
 2. Open `work/analysis.ipynb` and explore our data analysis.
 
 ### Database setup and API
