@@ -4,7 +4,7 @@
 #include <ESP8266WiFi.h>
 #include <NTPClient.h>
 #include <WiFiUdp.h>
-
+#include <ArduinoJson.h>
 
 // Globals
 const char *ssid = "MyAccessPoint";  //ENTER YOUR WIFI ssid
@@ -75,13 +75,15 @@ String getDate()
     return currentDate;
 }
 
-String makePayload(const String value)
+String makePayload(const String &value)
 {
     DynamicJsonDocument payload(1024);
-    payload["device"] = "Holzbox-Arduino";
+    String device = "Tuersensor-Arduino";
+    String sensor = "LDR";
+    payload["device"] = device;
     payload["mac"] = WiFi.macAddress();
-    payload["sensor"] = "LDR";
-    payload["value"] = value;
+    payload["sensor"] = sensor;
+    payload["value"] = value.c_str();
 
     char result[1024];
     serializeJson(payload, result);
@@ -100,8 +102,6 @@ void loop() {
   } else {
     lightStatus = prevLightStatus;
   }
-  Serial.println(sensorValue);
-  Serial.println(lightStatus);
   
   if (lightStatus != prevLightStatus) {
     String sensorData,currentDate,formattedTime;
@@ -120,8 +120,11 @@ void loop() {
 
     udp.begin(8888);
     String payload = makePayload(sensorData);
+    int payloadLen = payload.length() + 1;
+    char payloadArray[payloadLen];
+    payload.toCharArray(payloadArray, payloadLen);
     udp.beginPacket(remoteIP,remotePort);
-    udp.write(payload);
+    udp.write(payloadArray);
     udp.endPacket();
 
   }
