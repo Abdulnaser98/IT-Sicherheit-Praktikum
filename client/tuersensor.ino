@@ -7,8 +7,8 @@
 #include <ArduinoJson.h>
 
 // Globals
-const char *ssid = "MyAccessPoint";  //ENTER YOUR WIFI ssid
-const char *password = "0123asdf";  //ENTER YOUR WIFI password
+const char *ssid = "MyAccessPoint";
+const char *password = "0123asdf";
 const int lightLowerThreshold = 690;
 const int lightUpperThreshold = 705;
 int prevLightStatus = 0;
@@ -18,7 +18,7 @@ String months[12]={"January", "February", "March", "April", "May", "June", "July
 
 
 WiFiClient wifiClient;
-HTTPClient http;    //Declare object of class HTTPClient
+HTTPClient http;
 
 WiFiUDP udp;
 NTPClient timeClient(udp, "pool.ntp.org");
