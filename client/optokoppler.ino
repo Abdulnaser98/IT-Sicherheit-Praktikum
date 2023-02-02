@@ -18,7 +18,7 @@ int remotePort=8000;
 #define socket3 D3
 #define socket4 D4
 
-String deviceName = "Optokoppler-Adruino";
+String deviceName = "Optokoppler-Arduino";
 
 String socket1State = "undefined";
 String socket2State = "undefined";
