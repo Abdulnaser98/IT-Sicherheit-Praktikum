@@ -1,13 +1,13 @@
 # About
 
-This project provides software that enables tracking of common Smart Home devices, e.g. light bulbs. The idea is to connect sensors to ESP-12 microcontrollers that monitor the IoT devices.
+This project provides software that enables tracking of common Smart Home devices, e.g. power outlets. The idea is to connect sensors to ESP-12 microcontrollers that monitor the IoT devices.
 
 ## TL,DR;
 
 ### Arduino Scripts
 We provide two Arduino scripts:
-* `client\tuersensor.ino` provides a script to messure the output of a _photoresistor light sensor module_. Whenever a pre-defined threshold is exceeded, the microcontroller sends the new state as payload of an UDP request.
-* `client\optokoppler.ino` is used to track smart power outlest and lightbulbs connected to an _ESP-12_ in the same way as described above.
+* `client\tuersensor.ino` provides a script to measure the output of a _photoresistor light sensor module_. Whenever a pre-defined threshold is exceeded, the microcontroller sends the new state as payload of an UDP request.
+* `client\optokoppler.ino` is used to track smart power outlets and switches connected to an _ESP-12_ in the same way as described above.
 
 ### Data Analysis
 
