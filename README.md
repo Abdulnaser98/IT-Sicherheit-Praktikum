@@ -6,8 +6,8 @@ This project provides software that enables tracking of common Smart Home device
 
 ### Arduino Scripts
 We provide two Arduino scripts:
-* `client\tuersensor.ino` provides a script to measure the output of a _photoresistor light sensor module_. Whenever a pre-defined threshold is exceeded, the microcontroller sends the new state as payload of an UDP request.
-* `client\optokoppler.ino` is used to track smart power outlets and switches connected to an _ESP-12_ in the same way as described above.
+* `client/tuersensor.ino` provides a script to measure the output of a _photoresistor light sensor module_. Whenever a pre-defined threshold is exceeded, the microcontroller sends the new state as payload of an UDP request.
+* `client/optokoppler.ino` is used to track smart power outlets and switches connected to an _ESP-12_ in the same way as described above.
 
 ### Data Analysis
 
